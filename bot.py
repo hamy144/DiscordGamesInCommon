@@ -10,7 +10,6 @@ from threading import Thread
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
-GUILD = os.getenv('DISCORD_GUILD')
 steamapikey = os.getenv('steamapikey')
 dbHost = os.getenv('dbHost')
 dbPort = os.getenv('dbPort')
@@ -141,7 +140,8 @@ def GetSteamId(discordId):
 def GetGamesFromIds(games):
     ret = []
     for game in games:
-        ret.append(appList[game])
+        if game in appList:
+            ret.append(appList[game])
     return ret
 
 # literally queries the entire steam library getting ALL apps and data back instead of being able to filter in the call
