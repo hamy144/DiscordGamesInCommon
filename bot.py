@@ -23,7 +23,7 @@ dbPassword = os.getenv('dbPassword')
 bot = commands.Bot(command_prefix='!')
 client = discord.Client()
 
-@client.event
+@bot.event
 async def on_ready():
     print("Number of servers connected to: " + str(len(client.guilds)))
     for guild in client.guilds:
@@ -32,7 +32,7 @@ async def on_ready():
             f'{guild.name}(id: {guild.id})'
         )
 
-@client.event
+@bot.event
 async def on_message(message):
     if message.author == client.user:
         return
@@ -174,4 +174,4 @@ def GetOwnedGames(steamid, result, index):
     result[index] = list(map(lambda x: x["appid"], response.json()["response"]["games"]))
 
 appList = GetAppList()
-client.run(TOKEN)
+bot.run(TOKEN)
