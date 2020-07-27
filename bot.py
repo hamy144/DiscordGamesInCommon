@@ -21,7 +21,7 @@ dbPassword = os.getenv('dbPassword')
 
 # Discord client
 bot = commands.Bot(command_prefix='!')
-client = discord.Client()
+#client = discord.Client()
 
 @bot.event
 async def on_ready():
