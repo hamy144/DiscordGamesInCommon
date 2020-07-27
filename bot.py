@@ -25,16 +25,16 @@ bot = commands.Bot(command_prefix='!')
 
 @bot.event
 async def on_ready():
-    print("Number of servers connected to: " + str(len(client.guilds)))
-    for guild in client.guilds:
+    print("Number of servers connected to: " + str(len(bot.guilds)))
+    for guild in bot.guilds:
         print(
-            f'{client.user} is connected to the following guild:\n'
+            f'{bot.user} is connected to the following guild:\n'
             f'{guild.name}(id: {guild.id})'
         )
 
 @bot.event
 async def on_message(message):
-    if message.author == client.user:
+    if message.author == bot.user:
         return
 
     if message.channel.type is discord.ChannelType.private:        
