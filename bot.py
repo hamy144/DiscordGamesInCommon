@@ -25,7 +25,7 @@ client = discord.Client()
 
 @client.event
 async def on_ready():
-    print("Number of servers connected to: " + len(client.guilds))
+    print("Number of servers connected to: " + str(len(client.guilds)))
     for guild in client.guilds:
         print(
             f'{client.user} is connected to the following guild:\n'
