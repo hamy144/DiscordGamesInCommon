@@ -7,7 +7,9 @@ import json
 import random
 from dotenv import load_dotenv
 from threading import Thread
+from discord.ext import commands
 
+# Environment variables
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 steamapikey = os.getenv('steamapikey')
@@ -17,10 +19,13 @@ dbName = os.getenv('dbName')
 dbUser = os.getenv('dbUser')
 dbPassword = os.getenv('dbPassword')
 
+# Discord client
+bot = commands.Bot(command_prefix='!')
 client = discord.Client()
 
 @client.event
 async def on_ready():
+    print("Number of servers connected to: " + len(client.guilds))
     for guild in client.guilds:
         print(
             f'{client.user} is connected to the following guild:\n'
@@ -36,33 +41,36 @@ async def on_message(message):
         discordId = message.author.id
         #will split out the url, last element will be either the steam id or the rich text id
         splitmessage = message.content.split('/')
+        #compensates for a possible extra / in url
+        steamLinkId = splitmessage[-1] if splitmessage[-1] != '' else  splitmessage[-2]
         try:
-            steamId = int(splitmessage[-1] if splitmessage[-1] != '' else  splitmessage[-2])
+            steamId = int(steamLinkId)
             #add to postgress database
             AddUserToDB(discordId, steamId)
             await message.author.send("Steam ID successfully added!")
         except:
             #then call steam api
-            steamId = GetSteamIDFromRichName(splitmessage[-1] if splitmessage[-1] != '' else  splitmessage[-2])
+            steamId = GetSteamIDFromRichName(steamLinkId)
             if steamId != False:
                 AddUserToDB(discordId, steamId)
                 await message.author.send("Steam ID successfully added!")
             else:
-                await message.author.send("Steam ID was unable to be found, please try again with your steam64 ID")
+                await message.author.send("Steam ID was unable to be found, please try again with your steam64 ID")            
 
-    else:        
-        if message.content.lower() == "!games":
-            print("finding games")
-            possibleGames = await GetPlayableGames(message)
-            if len(possibleGames) == 0:
-                await message.channel.send('You fucking donkey')
-            else:
-                await message.channel.send(', '.join(GetGamesFromIds(possibleGames))[:2000])                        
+@bot.command
+async def games(ctx):
+    print("finding games")
+    possibleGames = await GetPlayableGames(ctx.message)
+    if len(ctx.possibleGames) == 0:
+        await ctx.message.channel.send("Looks like you don't get to play any games :(")
+    else:
+        await ctx.message.channel.send(', '.join(GetGamesFromIds(possibleGames))[:2000])
 
-        if message.content == "SPIN THE WHEEL":
-            await message.channel.send("picking game that isnt age 2")
-            possibleGames = await GetPlayableGames(message)
-            await message.channel.send("The game you shall play is....... " + random.choice(GetGamesFromIds(possibleGames)))
+@bot.command
+async def spinthewheel(ctx):
+    await ctx.message.channel.send("Picking game that isn't Age 2")
+    possibleGames = await GetPlayableGames(ctx.message)
+    await ctx.message.channel.send("The game you shall play is....... " + random.choice(GetGamesFromIds(possibleGames)))
 
 async def GetPlayableGames(message):
     possibleGames = []
@@ -88,7 +96,6 @@ async def GetPlayableGames(message):
             else:
                 if i in playerGamesDict:
                     possibleGames = list(set(possibleGames) & set(playerGamesDict[i]))
-                        
     else:
         print("User not found")
     return possibleGames
@@ -125,7 +132,7 @@ def GetSteamId(discordId):
         return row[0]
     return False
 
-#this doesnt work properly because steam api is shit
+#this doesnt work properly because the steam api is shit and doesn't list all the games in their library on this endpoint
 # def GetGamesFromIds(games):
 #     ret = []
 #     for game in games:
