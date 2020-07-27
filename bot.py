@@ -55,7 +55,8 @@ async def on_message(message):
                 AddUserToDB(discordId, steamId)
                 await message.author.send("Steam ID successfully added!")
             else:
-                await message.author.send("Steam ID was unable to be found, please try again with your steam64 ID")            
+                await message.author.send("Steam ID was unable to be found, please try again with your steam64 ID")
+    await bot.process_commands(message)
 
 @bot.command()
 async def games(ctx):
