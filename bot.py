@@ -62,7 +62,7 @@ async def on_message(message):
 async def games(ctx):
     print("finding games")
     possibleGames = await GetPlayableGames(ctx.message)
-    if len(ctx.possibleGames) == 0:
+    if len(possibleGames) == 0:
         await ctx.message.channel.send("Looks like you don't get to play any games :(")
     else:
         await ctx.message.channel.send(', '.join(GetGamesFromIds(possibleGames))[:2000])
