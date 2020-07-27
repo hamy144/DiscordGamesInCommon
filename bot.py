@@ -57,7 +57,7 @@ async def on_message(message):
             else:
                 await message.author.send("Steam ID was unable to be found, please try again with your steam64 ID")            
 
-@bot.command
+@bot.command()
 async def games(ctx):
     print("finding games")
     possibleGames = await GetPlayableGames(ctx.message)
@@ -66,7 +66,7 @@ async def games(ctx):
     else:
         await ctx.message.channel.send(', '.join(GetGamesFromIds(possibleGames))[:2000])
 
-@bot.command
+@bot.command()
 async def spinthewheel(ctx):
     await ctx.message.channel.send("Picking game that isn't Age 2")
     possibleGames = await GetPlayableGames(ctx.message)
