@@ -37,7 +37,7 @@ async def on_message(message):
         #will split out the url, last element will be either the steam id or the rich text id
         splitmessage = message.content.split('/')
         try:
-            steamId = int(splitmessage[-1])            
+            steamId = int(splitmessage[-1] if splitmessage[-1] != '' else  splitmessage[-2])
             #add to postgress database
             AddUserToDB(discordId, steamId)
             await message.author.send("Steam ID successfully added!")
