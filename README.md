@@ -1,5 +1,6 @@
 # DiscordGamesInCommon
 Ever hanging out with your friends in discord trying to pick a game for you and your friends to play together only to suggest games one or multiple people don't own? Well no more, with the Games In Common Discord bot you can quickly and easily find out what Steam games you all have in common and even have it pick one for you to play, except Age 2 of course.
+
 The bot is written in Python 3 and using a Postgres database Docker image.
 
 ## Usage
