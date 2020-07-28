@@ -9,5 +9,6 @@ For the bot to be able to see what games you own, you will need your Steam profi
 ## Commands
 !games
 - Lists the games that all players in the player's channel have in common.
+
 !spinthewheel
 - Picks a random game from all the games that all the players in the player's current have in common except for Age 2.
